@@ -42,7 +42,7 @@ export class MongoRepository implements IArticlesRepository {
   async getAll (): Promise<IArticle[]> {
     const articles = await ArticleModel.find()
 
-    if (articles === null) throw new AppError('Articles not found', 404, AppErrorType.NOT_FOUND)
+    if (articles.length === 0) throw new AppError('Articles not found', 404, AppErrorType.NOT_FOUND)
 
     return articles.map((article) => articleMapperMongo.toDomain(article))
   }
