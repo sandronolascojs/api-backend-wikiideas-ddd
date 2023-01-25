@@ -202,6 +202,104 @@
                         }
                     }
                 }
+            },
+            "put": {
+                "tags": [
+                    "Articles"
+                ],
+                "summary": "Update article by ID",
+                "description": "Update article by ID",
+                "operationId": "updateArticleById",
+                "parameters": [
+                    {
+                        "name": "articleId",
+                        "in": "path",
+                        "description": "Article ID",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "title": {
+                                        "type": "string",
+                                        "description": "Article title"
+                                    },
+                                    "content": {
+                                        "type": "string",
+                                        "description": "Article content"
+                                    },
+                                    "img": {
+                                        "type": "string | null",
+                                        "description": "Article image"
+                                    }
+                                }
+                            },
+                            "example": {
+                                "title": "Article title",
+                                "content": "Article content",
+                                "img": "Article image"
+                            }
+                        }
+                        
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "id": {
+                                    "type": "uuid",
+                                    "description": "Article ID"
+                                },
+                                "title": {
+                                    "type": "string",
+                                    "description": "Article title"
+                                },
+                                "content": {
+                                    "type": "string",
+                                    "description": "Article content"
+                                },
+                                "img": {
+                                    "type": "string | null",
+                                    "description": "Article image"
+                                },
+                                "createdAt": {
+                                    "type": "date",
+                                    "description": "Article creation date"
+                                }
+                            }
+                                
+                        }
+                    },
+                    "404": {
+                        "description": "Article not found",
+                        "content": {
+                            "application/json": {
+                                "status": {
+                                    "type": "number",
+                                    "description": "404"
+                                },
+                                "message": {
+                                    "type": "string",
+                                    "description": "Article not found"
+                                },
+                                "errorType": {
+                                    "type": "string",
+                                    "description": "NOT_FOUND"
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
     }
