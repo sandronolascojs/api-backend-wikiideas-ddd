@@ -13,9 +13,9 @@ export class ArticleViewModel {
       id: article.id,
       title: article.title,
       content: article.content,
-      img: process.env.disk === 'local' && article.img !== null
+      img: process.env.disk === 'local' || article.img === null
         ? article.img
-        : encodeURI(`${process.env.AWS_BUCKET_URL as string}/${article.img as string}`)
+        : encodeURI(`${process.env.AWS_BUCKET_URL as string}/${article.img}`)
     }
   }
 }
