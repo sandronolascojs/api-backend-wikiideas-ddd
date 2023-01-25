@@ -16,6 +16,5 @@ export const createArticleSchema = z.object({
     message: 'Content must be at least 1 character'
   }).max(10000, {
     message: 'Content must be at most 10000 characters'
-  }),
-  img: z.string().nullable().optional()
+  })
 }).strict()

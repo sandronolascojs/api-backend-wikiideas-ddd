@@ -1,3 +1,4 @@
+import { promises } from 'node:fs'
 import { Request, Response, NextFunction } from 'express'
 import { ZodError } from 'zod'
 
@@ -7,7 +8,11 @@ export const zodValidatorSchema = (schema: any) => async (request: Request, resp
     next()
   } catch (error) {
     if (error instanceof ZodError) {
-      response.status(400).json({
+      if (request.file !== null) {
+        await promises.unlink(request.file?.path as string)
+      }
+
+      return response.status(400).json({
         error: error.issues.map(error => {
           return {
             path: error.path[0],

@@ -17,6 +17,10 @@ export class UpdateArticleByIdUseCase {
 
     if (isArticleAlreadyExists === null) throw new AppError('Article not found', 404, AppErrorType.NOT_FOUND)
 
+    if (article.img === null) {
+      article.img = isArticleAlreadyExists.img
+    }
+
     return await this.articlesRepository.updateById(id, article)
   }
 }

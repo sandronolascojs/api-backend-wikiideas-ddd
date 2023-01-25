@@ -12,8 +12,9 @@ import routes from './infraestructure/routes'
 
 import './infraestructure/database/implementations/MongoDB/config/mongoDbConnection'
 import './shared/container'
-
+import { tmpFolder } from './shared/config/uploadConfig'
 import { AppError } from './shared/errors/appError'
+import { MulterError } from 'multer'
 
 const corsOptions = {
   origin: process.env.CORS_ORIGIN,
@@ -27,7 +28,7 @@ app.use(cors(corsOptions))
 app.use(morgan('dev'))
 app.use('/api/', routes)
 app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerJson))
-
+console.log('Temporary folder directory:', tmpFolder)
 
 app.use(
   (err: Error, request: Request, response: Response, next: NextFunction) => {
@@ -36,6 +37,13 @@ app.use(
         status: err.statusCode,
         message: err.message,
         errorType: err.errorType
+      })
+    }
+    if (err instanceof MulterError) {
+      return response.status(400).json({
+        status: 404,
+        message: err.message,
+        errorType: 'BAD_REQUEST'
       })
     }
     return response.status(500).json({

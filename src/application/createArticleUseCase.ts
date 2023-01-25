@@ -13,6 +13,7 @@ export class CreateArticleUseCase {
 
   async execute (article: IArticle): Promise<IArticle> {
     const newArticle = new Article(article)
+
     const saveArticle = await this.articlesRepository.create(newArticle)
 
     return saveArticle
