@@ -10,8 +10,6 @@ export class GetByIdArticleController {
   async handle (request: Request, response: Response): Promise<Response> {
     const { id } = request.params
 
-    console.log(id)
-
     const getByIdArticleUseCase = container.resolve(GetByIdArticleUseCase)
 
     const article = await getByIdArticleUseCase.execute(id)

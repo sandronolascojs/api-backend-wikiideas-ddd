@@ -15,6 +15,6 @@ export class CreateArticleController {
       img
     })
 
-    return response.status(201).json({article: savedArticle})
+    return response.status(201).json({ article: savedArticle })
   }
 }

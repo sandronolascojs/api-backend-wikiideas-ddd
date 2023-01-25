@@ -5,6 +5,8 @@ import { CreateArticleUseCase } from './CreateArticleUseCase'
 import { GetByIdArticleUseCase } from './getByIdArticleUseCase'
 import { InMemoryRepository } from '../infraestructure/database'
 
+import { AppError, AppErrorType } from '../shared/errors/appError'
+
 const repository = new InMemoryRepository()
 const createArticleUseCase = new CreateArticleUseCase(repository)
 const getByIdArticleUseCase = new GetByIdArticleUseCase(repository)
@@ -28,5 +30,11 @@ describe('GetByIdArticleUseCase', () => {
             img: 'hello.png',
             createdAt: expect.any(Date),
         })
+    })
+
+    it('should throw an error if the article does not exist', async () => {
+        const result = getByIdArticleUseCase.execute('123')
+
+        await expect(result).rejects.toEqual(new AppError('Article not found', 404, AppErrorType.NOT_FOUND))
     })
 })

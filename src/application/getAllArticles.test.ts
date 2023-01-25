@@ -6,11 +6,19 @@ import { GetAllArticlesUseCase } from "./getAllArticlesUseCase"
 import { InMemoryRepository } from "../infraestructure/database"
 import { CreateArticleUseCase } from "./CreateArticleUseCase"
 
+import { AppError, AppErrorType } from '../shared/errors/appError';
+
 const repository = new InMemoryRepository()
 const createArticleUseCase = new CreateArticleUseCase(repository)
 const getAllArticlesUseCase = new GetAllArticlesUseCase(repository)
 
 describe("GetAllArticlesUseCase", () => {
+    it("should throw an error if there are no articles", async () => {
+        const result = getAllArticlesUseCase.execute()
+
+        await expect(result).rejects.toEqual(new AppError("No articles found", 404, AppErrorType.NOT_FOUND))
+    })
+
     it("should get all articles", async () => {
         const article = {
             title: "Test",

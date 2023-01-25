@@ -1,3 +1,4 @@
+import { Types } from 'mongoose'
 import { IArticle } from '../../../../../domain/IArticle'
 
 export interface IArticleMapper {
@@ -6,6 +7,7 @@ export interface IArticleMapper {
 }
 
 interface IArticlePersistence {
+  _id?: Types.ObjectId
   id?: string
   title: string
   content: string

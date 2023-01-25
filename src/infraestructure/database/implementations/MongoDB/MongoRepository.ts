@@ -3,7 +3,6 @@ import { IArticlesRepository } from '../../../../domain/IArticlesRepository'
 
 import ArticleModel from './Models/ArticleModel'
 import { ArticleMapperMongo } from './mappers/articleMapperMongo'
-import { AppError, AppErrorType } from '../../../../shared/errors/appError'
 
 const articleMapperMongo = new ArticleMapperMongo()
 
@@ -15,14 +14,16 @@ export class MongoRepository implements IArticlesRepository {
     return articleMapperMongo.toDomain(newArticle)
   }
 
-  async updateById (article: IArticle): Promise<IArticle> {
-    const updatedArticle = await ArticleModel.findByIdAndUpdate(
-      { _id: article.id },
+  async updateById (id: string, article: IArticle): Promise<IArticle | null> {
+    const updatedArticle = await ArticleModel.findOneAndUpdate(
+      { id },
       article,
       { new: true }
     )
 
-    if (updatedArticle === null) throw new AppError('Article not found', 404, AppErrorType.NOT_FOUND)
+    if (updatedArticle === null) {
+      return null
+    }
 
     return articleMapperMongo.toDomain(updatedArticle)
   }
@@ -31,18 +32,16 @@ export class MongoRepository implements IArticlesRepository {
     await ArticleModel.findByIdAndDelete({ id })
   }
 
-  async getById (id: string): Promise<IArticle> {
+  async getById (id: string): Promise<IArticle | null> {
     const article = await ArticleModel.findOne({ id })
 
-    if (article === null) throw new AppError('Article not found', 404, AppErrorType.NOT_FOUND)
+    if (article === null) return null
 
     return articleMapperMongo.toDomain(article)
   }
 
   async getAll (): Promise<IArticle[]> {
     const articles = await ArticleModel.find()
-
-    if (articles.length === 0) throw new AppError('Articles not found', 404, AppErrorType.NOT_FOUND)
 
     return articles.map((article) => articleMapperMongo.toDomain(article))
   }

@@ -2,6 +2,7 @@ import { inject, injectable } from 'tsyringe'
 
 import { IArticlesRepository } from '../domain/IArticlesRepository'
 import { IArticle } from '../domain/IArticle'
+import { AppError, AppErrorType } from '../shared/errors/appError'
 
 @injectable()
 export class GetByIdArticleUseCase {
@@ -11,6 +12,10 @@ export class GetByIdArticleUseCase {
   ) {}
 
   async execute (id: string): Promise<IArticle> {
-    return await this.articlesRepository.getById(id)
+    const article = await this.articlesRepository.getById(id)
+
+    if (article === null) throw new AppError('Article not found', 404, AppErrorType.NOT_FOUND)
+
+    return article
   }
 }

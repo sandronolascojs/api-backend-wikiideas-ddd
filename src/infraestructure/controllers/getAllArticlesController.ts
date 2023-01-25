@@ -1,21 +1,21 @@
-import { Request , Response } from "express" ;
-import { container } from "tsyringe";
+import { Request, Response } from 'express'
+import { container } from 'tsyringe'
 
-import { GetAllArticlesUseCase } from "../../application/getAllArticlesUseCase";
-import { ArticleViewModel } from "../views/articleViewModel";
+import { GetAllArticlesUseCase } from '../../application/getAllArticlesUseCase'
+import { ArticleViewModel } from '../views/articleViewModel'
 
-const articleViewModel = new ArticleViewModel();
+const articleViewModel = new ArticleViewModel()
 
 export class GetAllArticlesController {
-    async handle(_request: Request, response: Response) {
-        const getAllArticlesUseCase = container.resolve(GetAllArticlesUseCase);
+  async handle (_request: Request, response: Response): Promise<Response> {
+    const getAllArticlesUseCase = container.resolve(GetAllArticlesUseCase)
 
-        const articles = await getAllArticlesUseCase.execute();
+    const articles = await getAllArticlesUseCase.execute()
 
-        const articlesFromDomain = articles.map((article) => {
-            return articleViewModel.fromDomain(article);
-        })
+    const articlesFromDomain = articles.map((article) => {
+      return articleViewModel.fromDomain(article)
+    })
 
-        return response.status(200).json(articlesFromDomain);
-    }
+    return response.status(200).json(articlesFromDomain)
+  }
 }
